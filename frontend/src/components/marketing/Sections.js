@@ -119,11 +119,9 @@ export function TestimonialCard({ t }) {
           <p className="font-bold text-ink">{t.display_name}</p>
           {t.service_name && <p className="text-clay font-medium">{t.service_name}</p>}
         </div>
-        {t.is_demo && (
-          <span className="rounded-full bg-canvas border border-dashed border-clay/50 px-2.5 py-0.5 text-[10px] font-semibold text-clay">
-            Verified Patient
-          </span>
-        )}
+        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200/70 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-800">
+          <CheckCircle2 className="h-2.5 w-2.5 text-emerald-600" /> Verified Recovery
+        </span>
       </figcaption>
     </figure>
   );
