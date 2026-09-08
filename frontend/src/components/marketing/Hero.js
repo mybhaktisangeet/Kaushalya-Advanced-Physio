@@ -6,7 +6,7 @@ import { formatDate, telLink } from "@/lib/format";
 import { track } from "@/lib/analytics";
 
 const HERO_IMAGE = "https://images.unsplash.com/photo-1649751361457-01d3a696c7e6?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200";
-const DOCTOR_AVATAR = "https://images.unsplash.com/photo-1594824813581-79b8a923a10e?crop=entropy&cs=srgb&fm=jpg&q=80&w=400";
+const DOCTOR_AVATAR = "https://images.unsplash.com/photo-1582750433449-648ed127bb54?crop=entropy&cs=srgb&fm=jpg&q=80&w=400";
 const CLINIC_THUMB = "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?crop=entropy&cs=srgb&fm=jpg&q=80&w=500";
 
 const AVATARS = [
@@ -199,8 +199,9 @@ export function Hero() {
 
               <div className="mt-4 flex items-center gap-4">
                 <img
-                  src={leadDoctor?.photo_url || DOCTOR_AVATAR}
+                  src={leadDoctor?.photo_url && leadDoctor.photo_url.startsWith("http") && !leadDoctor.photo_url.includes("1594824813581") ? leadDoctor.photo_url : DOCTOR_AVATAR}
                   alt={leadDoctor?.name || "Dr. Ananya Kulkarni"}
+                  onError={(e) => { e.currentTarget.src = DOCTOR_AVATAR; }}
                   className="h-16 w-16 rounded-2xl object-cover shadow-xs border border-white"
                 />
                 <div className="flex flex-col">

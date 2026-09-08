@@ -5,21 +5,21 @@ import { useDoctors } from "@/features/public/queries";
 import { LoadingState } from "@/components/shared/States";
 
 const DOCTOR_PORTRAITS = {
-  "ananya-kulkarni": "https://images.unsplash.com/photo-1594824813581-79b8a923a10e?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
+  "ananya-kulkarni": "https://images.unsplash.com/photo-1582750433449-648ed127bb54?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
   "rohan-deshmukh": "https://images.unsplash.com/photo-1622253692010-333f2da6031d?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
   "sneha-patil": "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
   "vikram-joshi": "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
 };
 
 const FALLBACK_LIST = [
-  "https://images.unsplash.com/photo-1594824813581-79b8a923a10e?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
+  "https://images.unsplash.com/photo-1582750433449-648ed127bb54?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
   "https://images.unsplash.com/photo-1622253692010-333f2da6031d?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
   "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
   "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?crop=entropy&cs=srgb&fm=jpg&q=80&w=400",
 ];
 
 export function DoctorCard({ doctor, index = 0 }) {
-  const photo = (doctor.photo_url && !doctor.photo_url.includes("622253692010") && doctor.photo_url.startsWith("http"))
+  const photo = (doctor.photo_url && !doctor.photo_url.includes("622253692010") && !doctor.photo_url.includes("1594824813581") && doctor.photo_url.startsWith("http"))
     ? doctor.photo_url
     : (DOCTOR_PORTRAITS[doctor.slug] || FALLBACK_LIST[index % FALLBACK_LIST.length]);
 
@@ -35,6 +35,7 @@ export function DoctorCard({ doctor, index = 0 }) {
             <img
               src={photo}
               alt={doctor.name}
+              onError={(e) => { e.currentTarget.src = FALLBACK_LIST[index % FALLBACK_LIST.length]; }}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           </div>
