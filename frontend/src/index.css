@@ -130,6 +130,35 @@
     .admin-table td {
         @apply px-3 py-2.5 text-sm align-middle;
     }
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 20px 40px -15px rgba(200, 121, 97, 0.08), 0 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+    .glass-pill {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(229, 231, 229, 0.8);
+    }
+    .hero-big-text {
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        background: linear-gradient(180deg, rgba(200, 121, 97, 0.38) 0%, rgba(200, 121, 97, 0.12) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        user-select: none;
+    }
+    .warm-mesh {
+        background: 
+            radial-gradient(circle at 10% 20%, rgba(247, 236, 231, 0.9) 0%, transparent 40%),
+            radial-gradient(circle at 90% 15%, rgba(255, 243, 235, 0.95) 0%, transparent 45%),
+            radial-gradient(circle at 50% 60%, rgba(254, 250, 246, 1) 0%, rgba(249, 249, 248, 1) 100%);
+    }
 }
 
 @keyframes rise {
@@ -140,3 +169,4 @@
 [data-debug-wrapper="true"] {
     display: contents !important;
 }
+
