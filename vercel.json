@@ -1,0 +1,9 @@
+{
+  "framework": null,
+  "buildCommand": "cd frontend && npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": "frontend/build",
+  "installCommand": "echo 'skipping global install'",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

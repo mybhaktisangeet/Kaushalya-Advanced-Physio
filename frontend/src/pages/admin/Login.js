@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
@@ -9,6 +9,8 @@ import { Spinner } from "@/components/shared/States";
 import { useAuth } from "@/features/auth/AuthContext";
 import { api, getErrorMessage } from "@/lib/api";
 import { useSeo } from "@/lib/seo";
+
+const DEMO_MODE = process.env.REACT_APP_DEMO_MODE === "true";
 
 function AuthShell({ title, subtitle, children, footer }) {
   return (
@@ -75,6 +77,20 @@ export default function Login() {
         <Button type="submit" disabled={busy} className="h-11 w-full bg-brand hover:bg-brand-hover" data-testid="login-submit-button">{busy ? <><Spinner /> Signing in...</> : "Sign in"}</Button>
         <p className="text-center text-sm"><Link to="/admin/forgot-password" className="text-muted-foreground hover:text-foreground" data-testid="forgot-password-link">Forgot your password?</Link></p>
       </form>
+      {DEMO_MODE && (
+        <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3">
+          <button
+            type="button"
+            onClick={() => setForm({ email: "admin@kaushalyaphysio.com", password: "Admin@12345" })}
+            className="flex w-full items-center justify-center gap-2 rounded-md bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-amber-600"
+            data-testid="demo-autofill-button"
+          >
+            <Zap className="h-4 w-4" />
+            Use demo credentials
+          </button>
+          <p className="mt-1.5 text-center text-xs text-amber-700">One-click autofill for demonstration</p>
+        </div>
+      )}
     </AuthShell>
   );
 }
