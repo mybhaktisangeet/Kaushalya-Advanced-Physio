@@ -72,10 +72,12 @@ def _clear_cookies(response: Response) -> None:
 async def _start_session(user: dict, request: Request, response: Response) -> dict:
     session_id = new_id()
     await db.sessions.insert_one({"_id": session_id, "user_id": user["_id"], "ip": client_ip(request), "user_agent": (request.headers.get("user-agent") or "")[:200], "created_at": utc_now(), "expires_at": utc_now() + timedelta(days=cfg.refresh_token_days), "revoked": False})
-    _set_cookies(response, create_access_token(user["_id"], user["role"], session_id), create_refresh_token(user["_id"], session_id))
+    access = create_access_token(user["_id"], user["role"], session_id)
+    refresh = create_refresh_token(user["_id"], session_id)
+    _set_cookies(response, access, refresh)
     await db.users.update_one({"_id": user["_id"]}, {"$set": {"last_login_at": utc_now()}})
     await audit.log(actor_of(user), "admin_logged_in", "user", user["_id"], {}, client_ip(request))
-    return {"user": sanitize_user(user), "access_token": create_access_token(user["_id"], user["role"], session_id)}
+    return {"user": sanitize_user(user), "access_token": access, "refresh_token": refresh}
 
 
 async def _check_lock(identifier: str) -> None:
@@ -140,6 +142,17 @@ async def mfa_verify(data: MfaVerifyInput, request: Request, response: Response)
 async def refresh(request: Request, response: Response):
     token = request.cookies.get("refresh_token")
     if not token:
+        header = request.headers.get("Authorization", "")
+        if header.startswith("Bearer "):
+            token = header[7:]
+    if not token:
+        try:
+            body = await request.json()
+            if isinstance(body, dict):
+                token = body.get("refresh_token")
+        except Exception:
+            token = None
+    if not token:
         raise AppError(401, "no_refresh_token", "Please sign in again.")
     try:
         payload = decode_token(token, "refresh")
@@ -152,8 +165,10 @@ async def refresh(request: Request, response: Response):
         _clear_cookies(response)
         raise AppError(401, "session_revoked", "Your session has ended. Please sign in again.")
     await db.sessions.update_one({"_id": session["_id"]}, {"$set": {"last_seen_at": utc_now()}})
-    _set_cookies(response, create_access_token(user["_id"], user["role"], session["_id"]), create_refresh_token(user["_id"], session["_id"]))
-    return {"user": sanitize_user(user)}
+    access = create_access_token(user["_id"], user["role"], session["_id"])
+    refresh = create_refresh_token(user["_id"], session["_id"])
+    _set_cookies(response, access, refresh)
+    return {"user": sanitize_user(user), "access_token": access, "refresh_token": refresh}
 
 
 @router.post("/logout")
