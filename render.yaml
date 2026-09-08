@@ -16,6 +16,14 @@ services:
         value: "true"
       - key: COOKIE_SAMESITE
         value: none
+      - key: DB_NAME
+        value: kaushalya_physio
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "https://k.2up.in,https://kaushalya-advanced-physio-dtb2.vercel.app,https://kaushalya-advanced-physio.vercel.app"
+      - key: PUBLIC_APP_URL
+        value: "https://k.2up.in"
       - key: ACCESS_TOKEN_MINUTES
         value: "60"
       - key: REFRESH_TOKEN_DAYS
